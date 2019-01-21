@@ -1,0 +1,17 @@
+{
+  "name": "radio-metadata-api",
+  "version": "1.0.0",
+  "description": "Node.JS API which queries radio stations for \"Now Playing\" metadata",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Patrick Browning",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "icecast-parser": "^3.0.0",
+    "node-internet-radio": "^0.1.5",
+    "radio-stream": "0.0.1"
+  }
+}
