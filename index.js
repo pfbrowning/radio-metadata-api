@@ -60,12 +60,12 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
  *        500:
  *          description: An error was reported by getStationInfo
  */
-app.get("/now-playing", query('url').isURL(), (req, res) => {
+app.get("/now-playing", query('url').exists(), (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    internetRadio.getStationInfo(req.query.url, function(error, station) {
+    internetRadio.getStationInfo(decodeURIComponent(req.query.url), function(error, station) {
         // If there was an error, then report it back with a 500
         if(error) {
             res.status(500).send(error.message);
