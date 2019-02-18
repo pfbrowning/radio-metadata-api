@@ -1,11 +1,11 @@
 const express = require("express");
 const internetRadio = require('node-internet-radio');
 const app = express();
-const port = 3000;
 const cors = require('cors');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const { query, validationResult } = require('express-validator/check');
+const port=process.env.PORT || 3000
 
 app.listen(port, () => {
  console.log(`Server running on port ${port}`);
