@@ -1,4 +1,6 @@
 # Radio Metadata API
+[![Build Status](https://toxicbard.visualstudio.com/Browninglogic%20Radio/_apis/build/status/radio-metadata-api%20-%20CI?branchName=master)](https://toxicbard.visualstudio.com/Browninglogic%20Radio/_build/latest?definitionId=1&branchName=master)
+
 Radio Metadata API is a simple Node.JS API which queries the provided internet radio URL and looks up the "Now Playing" metadata.  It provides an GET endpoint around the getStationInfo function provided by [node-internet-radio](https://www.npmjs.com/package/node-internet-radio) library.
 
 ## Usage
