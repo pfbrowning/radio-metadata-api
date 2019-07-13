@@ -7,19 +7,36 @@ const swaggerUi = require('swagger-ui-express');
 const { query, validationResult } = require('express-validator/check');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
+
+// Configuration via environment variables
 const port=process.env.PORT || 3000;
 const issuer = process.env.issuer;
 const audience = process.env.audience;
+const allowedCorsOriginsJSON = process.env.allowedCorsOrigins;
 
 app.listen(port, () => {
  console.log(`Server running on port ${port}`);
 });
 
-// Configure CORS
-app.use(cors());
+/* If a valid JSON string is present in the corsOrigins env variable,
+then pass it to use as the CORS origin option.  Otherwise allow all 
+origins. */
+let allowedCorsOrigins;
+if(allowedCorsOriginsJSON) {
+    try {
+        allowedCorsOrigins = JSON.parse(allowedCorsOriginsJSON);
+    } catch(error) {
+        console.error(error, 'Failed to parse allowedCorsOrigins.  Falling back to allowing all origins');
+    }
+}
+if(allowedCorsOrigins) {
+    app.use(cors({origin:allowedCorsOrigins}));
+} else {
+    app.use(cors());
+}
 
-/* If audience and issuer are present as environment variables,
-then use RS256 JWT Bearer Token authentication for all requests. */
+/* If audience and issuer are present, then use RS256 JWT 
+Bearer Token authentication for all requests. */
 if(issuer && audience) {
     app.use(jwt({
         secret: jwksRsa.expressJwtSecret({
