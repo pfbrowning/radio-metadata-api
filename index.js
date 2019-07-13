@@ -35,8 +35,23 @@ if (allowedCorsOrigins) {
   app.use(cors())
 }
 
+// Configure Swagger UI
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
+  swaggerDefinition: {
+    info: {
+      title: 'Internet Radio Metadata API',
+      version: '0.0.1',
+      description: 'API that retrieves the Now Playing metadata of radio streams via the node-internet-radio module'
+    },
+    host: 'localhost:3000',
+    basePath: '/'
+  },
+  apis: ['index.js']
+})))
+
 /* If audience and issuer are present, then use RS256 JWT
-Bearer Token authentication for all requests. */
+Bearer Token authentication for all requests *except* the
+Swagger UI. */
 if (issuer && audience) {
   app.use(jwt({
     secret: jwksRsa.expressJwtSecret({
@@ -48,22 +63,8 @@ if (issuer && audience) {
     audience: audience,
     issuer: issuer,
     algorithms: ['RS256']
-  }))
+  }).unless({ path: ['/swagger'] }))
 }
-
-// Configure Swagger UI
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
-  swaggerDefinition: swaggerDefinition = {
-    info: {
-      title: 'Internet Radio Metadata API',
-      version: '0.0.1',
-      description: 'API that retrieves the Now Playing metadata of radio streams via the node-internet-radio module'
-    },
-    host: 'localhost:3000',
-    basePath: '/'
-  },
-  apis: ['index.js']
-})))
 
 /**
  * @swagger

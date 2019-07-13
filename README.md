@@ -45,7 +45,5 @@ a valid standard RS-256 JWT access token.  This is optional: if you don't provid
 environment variables, the API will be publicly accessible.
 
 ## Roadmap For 1.0.0
-* Configure a linter
 * Restructure for readability
-* Allow Swagger page without auth
 * Write initial unit tests
