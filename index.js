@@ -1,76 +1,76 @@
-const express = require("express");
-const internetRadio = require('node-internet-radio');
-const app = express();
-const cors = require('cors');
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const { query, validationResult } = require('express-validator/check');
-const jwt = require('express-jwt');
-const jwksRsa = require('jwks-rsa');
+const express = require('express')
+const internetRadio = require('node-internet-radio')
+const app = express()
+const cors = require('cors')
+const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
+const { query, validationResult } = require('express-validator/check')
+const jwt = require('express-jwt')
+const jwksRsa = require('jwks-rsa')
 
 // Configuration via environment variables
-const port=process.env.PORT || 3000;
-const issuer = process.env.issuer;
-const audience = process.env.audience;
-const allowedCorsOriginsJSON = process.env.allowedCorsOrigins;
+const port = process.env.PORT || 3000
+const issuer = process.env.issuer
+const audience = process.env.audience
+const allowedCorsOriginsJSON = process.env.allowedCorsOrigins
 
 app.listen(port, () => {
- console.log(`Server running on port ${port}`);
-});
+  console.log(`Server running on port ${port}`)
+})
 
 /* If a valid JSON string is present in the corsOrigins env variable,
-then pass it to use as the CORS origin option.  Otherwise allow all 
+then pass it to use as the CORS origin option.  Otherwise allow all
 origins. */
-let allowedCorsOrigins;
-if(allowedCorsOriginsJSON) {
-    try {
-        allowedCorsOrigins = JSON.parse(allowedCorsOriginsJSON);
-    } catch(error) {
-        console.error(error, 'Failed to parse allowedCorsOrigins.  Falling back to allowing all origins');
-    }
+let allowedCorsOrigins
+if (allowedCorsOriginsJSON) {
+  try {
+    allowedCorsOrigins = JSON.parse(allowedCorsOriginsJSON)
+  } catch (error) {
+    console.error(error, 'Failed to parse allowedCorsOrigins.  Falling back to allowing all origins')
+  }
 }
-if(allowedCorsOrigins) {
-    app.use(cors({origin:allowedCorsOrigins}));
+if (allowedCorsOrigins) {
+  app.use(cors({ origin: allowedCorsOrigins }))
 } else {
-    app.use(cors());
+  app.use(cors())
 }
 
-/* If audience and issuer are present, then use RS256 JWT 
+/* If audience and issuer are present, then use RS256 JWT
 Bearer Token authentication for all requests. */
-if(issuer && audience) {
-    app.use(jwt({
-        secret: jwksRsa.expressJwtSecret({
-            cache: true,
-            rateLimit: true,
-            jwksRequestsPerMinute: 5,
-            jwksUri: `${issuer}.well-known/jwks.json`
-        }),
-        audience: audience,
-        issuer: issuer,
-        algorithms: ['RS256']
-    }));
+if (issuer && audience) {
+  app.use(jwt({
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `${issuer}.well-known/jwks.json`
+    }),
+    audience: audience,
+    issuer: issuer,
+    algorithms: ['RS256']
+  }))
 }
 
 // Configure Swagger UI
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
-    swaggerDefinition: swaggerDefinition = {
-        info: {
-            title: 'Internet Radio Metadata API',
-            version: '0.0.1',
-            description: "API that retrieves the Now Playing metadata of radio streams via the node-internet-radio module"
-        },
-        host: 'localhost:3000',
-        basePath: '/',
+  swaggerDefinition: swaggerDefinition = {
+    info: {
+      title: 'Internet Radio Metadata API',
+      version: '0.0.1',
+      description: 'API that retrieves the Now Playing metadata of radio streams via the node-internet-radio module'
     },
-    apis: ['index.js'],
-})));
+    host: 'localhost:3000',
+    basePath: '/'
+  },
+  apis: ['index.js']
+})))
 
 /**
  * @swagger
  * /now-playing:
  *  get:
  *      summary: Gets the 'Now Playing' metadata for the specified radio stream URL
- *      description: This is an API wrapper around the getStationInfo function 
+ *      description: This is an API wrapper around the getStationInfo function
  *          provided by https://www.npmjs.com/package/node-internet-radio.
  *      produces:
  *      - "application/json"
@@ -97,22 +97,21 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
  *        500:
  *          description: An error was reported by getStationInfo
  */
-app.get("/now-playing", query('url').exists(), (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+app.get('/now-playing', query('url').exists(), (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+  internetRadio.getStationInfo(decodeURIComponent(req.query.url), function (error, station) {
+    // If there was an error, then report it back with a 500
+    if (error) {
+      res.status(500).send(error.message)
+    // If the call was successful, then return the data with a 200
+    } else {
+      res.status(200).send(station)
     }
-    internetRadio.getStationInfo(decodeURIComponent(req.query.url), function(error, station) {
-        // If there was an error, then report it back with a 500
-        if(error) {
-            res.status(500).send(error.message);
-        }
-        // If the call was successful, then return the data with a 200
-        else {
-            res.status(200).send(station);
-        }
     /* Pass in query method in case the user provided a value.
     If nothing was provided, then getStationInfo will check all
     supported protocols, which is easy but inefficient. */
-    }, req.query.method);
-});
+  }, req.query.method)
+})
