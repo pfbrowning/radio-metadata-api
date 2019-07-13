@@ -4,7 +4,7 @@
   "description": "Node.JS API which queries radio stations for \"Now Playing\" metadata",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "author": "Patrick Browning",
   "license": "MIT",
@@ -18,5 +18,8 @@
     "swagger-jsdoc": "^3.2.7",
     "swagger-ui-express": "^4.0.2",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
   }
 }
