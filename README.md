@@ -1,7 +1,10 @@
 # Radio Metadata API
 [![Build Status](https://toxicbard.visualstudio.com/Browninglogic%20Radio/_apis/build/status/radio-metadata-api%20-%20CI?branchName=master)](https://toxicbard.visualstudio.com/Browninglogic%20Radio/_build/latest?definitionId=1&branchName=master)
 
+## Introduction
 Radio Metadata API is a simple Node.JS API which queries the provided internet radio URL and looks up the "Now Playing" metadata.  It provides an GET endpoint around the getStationInfo function provided by [node-internet-radio](https://www.npmjs.com/package/node-internet-radio) library.
+
+It's primarily intended for use by [Browninglogic Radio](https://github.com/pfbrowning/ng-radio), but it's intentionally decoupled in order to be of use to any other consumers which might also find it useful.
 
 ## Usage
 Clone the git repo, run `npm i` to install dependencies, and run `npm start` to run the API locally.
@@ -30,3 +33,14 @@ Let's say that I want to get the metadata for the stream located at `http://188.
 }
 ```
 I can now take note that "fetchsource" returns a value of "STREAM".  Now I know that if I want to make any subsequent metadata calls for the same station, I can add the "method=STREAM" parameter to the end of my GET request, as such: `http://localhost:3000/metadata/http%3A%2F%2F188.165.212.92%3A8000%2Fheavy128mp3?method=stream`.
+
+## Authentication
+If you supply `issuer` and `audience` as environment variables, the API will require
+a valid standard RS-256 JWT access token.  This is optional: if you don't provide these
+environment variables, the API will be publicly accessible.
+
+## Roadmap For 1.0.0
+* Implement basic logging
+* Configurable CORs origins
+* Configure a linter
+* Restructure for readability

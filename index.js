@@ -5,7 +5,11 @@ const cors = require('cors');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const { query, validationResult } = require('express-validator/check');
-const port=process.env.PORT || 3000
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+const port=process.env.PORT || 3000;
+const issuer = process.env.issuer;
+const audience = process.env.audience;
 
 app.listen(port, () => {
  console.log(`Server running on port ${port}`);
@@ -13,6 +17,22 @@ app.listen(port, () => {
 
 // Configure CORS
 app.use(cors());
+
+/* If audience and issuer are present as environment variables,
+then use RS256 JWT Bearer Token authentication for all requests. */
+if(issuer && audience) {
+    app.use(jwt({
+        secret: jwksRsa.expressJwtSecret({
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 5,
+            jwksUri: `${issuer}.well-known/jwks.json`
+        }),
+        audience: audience,
+        issuer: issuer,
+        algorithms: ['RS256']
+    }));
+}
 
 // Configure Swagger UI
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
