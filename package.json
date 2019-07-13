@@ -4,7 +4,9 @@
   "description": "Node.JS API which queries radio stations for \"Now Playing\" metadata",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "lint": "standard",
+    "lint-fix": "standard --fix"
   },
   "author": "Patrick Browning",
   "license": "MIT",
@@ -20,6 +22,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "standard": "^13.0.2"
   }
 }
