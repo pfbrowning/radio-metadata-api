@@ -47,3 +47,4 @@ environment variables, the API will be publicly accessible.
 ## Roadmap For 1.0.0
 * Restructure for readability
 * Write initial unit tests
+* Provide consistent error responses
