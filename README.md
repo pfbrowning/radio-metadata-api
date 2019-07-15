@@ -45,5 +45,7 @@ a valid standard RS-256 JWT access token.  This is optional: if you don't provid
 environment variables, the API will be publicly accessible.
 
 ## Roadmap For 1.0.0
-* Write initial unit tests
+* Move each middleware to its own file
+* Clean up & organize initial unit tests
+* Write now-playing unit tests
 * Provide consistent error responses

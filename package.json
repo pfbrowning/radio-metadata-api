@@ -16,6 +16,7 @@
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "express-validator": "^5.3.1",
+    "is-blank": "^2.1.0",
     "jwks-rsa": "^1.6.0",
     "node-internet-radio": "^0.1.5",
     "swagger-jsdoc": "^3.2.7",
