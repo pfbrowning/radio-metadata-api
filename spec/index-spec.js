@@ -11,7 +11,7 @@ describe('index.ts', () => {
     delete process.env.issuer
   })
 
-  it('should listen on port 3000 by default', (done) => {
+  it('should listen on port 3000 by default', () => {
     // Act: Initialize the index
     proxyquire('../index', {
       express: () => express
@@ -19,10 +19,9 @@ describe('index.ts', () => {
     // Assert: express.listen should have been called once specifying port 3000
     expect(express.listen).toHaveBeenCalledTimes(1)
     expect(express.listen.calls.mostRecent().args[0]).toBe(3000)
-    done()
   })
 
-  it('should listen on the port specified by PORT', (done) => {
+  it('should listen on the port specified by PORT', () => {
     // Arrange: Set a custom port value
     process.env.PORT = 42
     // Act: Initialize the index
@@ -32,7 +31,6 @@ describe('index.ts', () => {
     // Assert: Listen should have specified the custom port
     expect(express.listen).toHaveBeenCalledTimes(1)
     expect(express.listen.calls.mostRecent().args[0]).toBe('42')
-    done()
   })
 
   it('should call the CORS middleware', () => {
@@ -51,18 +49,16 @@ describe('index.ts', () => {
     expect(corsMiddlewareSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should configure swagger', (done) => {
+  it('should configure swagger', () => {
     // Act: Initialize index
     proxyquire('../index', {
       express: () => express
     })
     // Assert that the swagger endpoint was configured
     expect(express.use).toHaveBeenCalledWith('/swagger', jasmine.anything(), jasmine.anything())
-
-    done()
   })
 
-  it('should configure jwt authentication based on the provided values for issuer & audience', (done) => {
+  it('should configure jwt authentication based on the provided values for issuer & audience', () => {
     // Arrange: Define a dummy set of input & expectation data
     const testEntries = [
       { issuer: null, audience: null, useJwt: false },
@@ -140,8 +136,6 @@ describe('index.ts', () => {
         expect(jwksRsa.expressJwtSecret).not.toHaveBeenCalled()
       }
     })
-
-    done()
   })
 
   it('should use our route configuration', () => {
