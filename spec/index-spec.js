@@ -7,7 +7,6 @@ describe('index.ts', () => {
     express = jasmine.createSpyObj('express', ['listen', 'use'])
     // Clear each env variable that we care about before each test
     delete process.env.PORT
-    delete process.env.allowedCorsOrigins
     delete process.env.audience
     delete process.env.issuer
   })
@@ -36,43 +35,21 @@ describe('index.ts', () => {
     done()
   })
 
-  it('should enable CORS with the expected origin based on the value of allowedCorsOrigins', (done) => {
-    // Arrange: Define a set of expectations
-    const testEntries = [
-      { allowedCorsOrigins: null, expectedCorsParams: [] },
-      { allowedCorsOrigins: 'http://localhost:4200', expectedCorsParams: [] },
-      { allowedCorsOrigins: '{"origin":"http://localhost:4200"}', expectedCorsParams: [] },
-      { allowedCorsOrigins: '{}', expectedCorsParams: [] },
-      {
-        allowedCorsOrigins: '["http://localhost:4200","http://publishedspa.com"]',
-        expectedCorsParams: [{ origin: ['http://localhost:4200', 'http://publishedspa.com'] }]
-      },
-      {
-        allowedCorsOrigins: '["http://localhost:4200"]',
-        expectedCorsParams: [{ origin: ['http://localhost:4200'] }]
-      }
-    ]
+  it('should call the CORS middleware', () => {
+    // Arrange: Set up a middleware spy to return a dummy middleware function
+    const middleware = (req, res, next) => void(0);
+    const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware').and.returnValue(middleware);
 
-    // For each expectation
-    testEntries.forEach(testEntry => {
-      // Act
-      // If the input value is non-null, set the environment variable accordingly
-      if (testEntry.allowedCorsOrigins) process.env.allowedCorsOrigins = testEntry.allowedCorsOrigins
-      /* Recreate the CORS spy once for each iteration so that we can always check
-            that it's been called exactly once. */
-      const cors = jasmine.createSpy('cors')
-      // Initialize index with the relevant spies
-      proxyquire('../index', {
-        express: () => express,
-        cors: cors
-      })
-      // Assert that CORS was called with the expected params
-      expect(cors).toHaveBeenCalledTimes(1)
-      expect(cors.calls.mostRecent().args).toEqual(testEntry.expectedCorsParams)
+    // Act: Init index with the relevant express & middleware spy
+    proxyquire('../index', {
+      express: () => express,
+      './middlewares/cors': corsMiddlewareSpy
     })
-
-    done()
-  })
+    
+    // Assert that the proper dummy cors middleware was passed to .use
+    expect(express.use).toHaveBeenCalledWith(middleware);
+    expect(corsMiddlewareSpy).toHaveBeenCalledTimes(1);
+  });
 
   it('should configure swagger', (done) => {
     // Act: Initialize index
