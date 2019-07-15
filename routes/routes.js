@@ -1,6 +1,6 @@
-const routes = require('express').Router();
+const routes = require('express').Router()
 const { query } = require('express-validator/check')
-const nowPlaying = require('./controllers/now-playing');
+const nowPlaying = require('./controllers/now-playing')
 
 /**
  * @swagger
@@ -34,6 +34,6 @@ const nowPlaying = require('./controllers/now-playing');
  *        500:
  *          description: An error was reported by getStationInfo
  */
-routes.get('/now-playing', query('url').exists(), nowPlaying.apiGET);
-  
-module.exports = routes;
+routes.get('/now-playing', query('url').exists(), nowPlaying.apiGET)
+
+module.exports = routes

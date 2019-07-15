@@ -4,8 +4,8 @@ const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
-const routes = require('./routes/routes');
-const isBlank = require('is-blank');
+const routes = require('./routes/routes')
+const isBlank = require('is-blank')
 
 // Configuration via environment variables
 let issuer = process.env.issuer
@@ -55,8 +55,8 @@ Bearer Token authentication for all requests *except* the
 Swagger UI. */
 if (!isBlank(issuer) && !isBlank(audience)) {
   // Fix issuer if it doesn't contain a trailing slash
-  if(!issuer.endsWith('/')) {
-    issuer = `${issuer}/`;
+  if (!issuer.endsWith('/')) {
+    issuer = `${issuer}/`
   }
   app.use(jwt({
     secret: jwksRsa.expressJwtSecret({
@@ -72,4 +72,4 @@ if (!isBlank(issuer) && !isBlank(audience)) {
 }
 
 // Connect imported routes to Express
-app.use('/', routes);
+app.use('/', routes)
