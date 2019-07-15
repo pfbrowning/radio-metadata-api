@@ -35,19 +35,19 @@ describe('index.ts', () => {
 
   it('should call the CORS middleware', () => {
     // Arrange: Set up a middleware spy to return a dummy middleware function
-    const middleware = (req, res, next) => void(0);
-    const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware').and.returnValue(middleware);
+    const middleware = (req, res, next) => void (0)
+    const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware').and.returnValue(middleware)
 
     // Act: Init index with the relevant express & middleware spy
     proxyquire('../index', {
       express: () => express,
       './middlewares/cors': corsMiddlewareSpy
     })
-    
+
     // Assert that the proper dummy cors middleware was passed to .use
-    expect(express.use).toHaveBeenCalledWith(middleware);
-    expect(corsMiddlewareSpy).toHaveBeenCalledTimes(1);
-  });
+    expect(express.use).toHaveBeenCalledWith(middleware)
+    expect(corsMiddlewareSpy).toHaveBeenCalledTimes(1)
+  })
 
   it('should configure swagger', () => {
     // Act: Initialize index

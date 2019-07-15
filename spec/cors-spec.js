@@ -35,7 +35,7 @@ describe('CORS Middleware', () => {
         cors: cors
       })
       // Act: Run the created CORS middleware function
-      corsMiddleware();
+      corsMiddleware()
 
       // Assert that CORS was called with the expected params
       expect(cors).toHaveBeenCalledTimes(1)
