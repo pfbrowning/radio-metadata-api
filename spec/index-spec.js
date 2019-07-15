@@ -13,7 +13,7 @@ describe('index.ts', () => {
             'express': () => express
         });
         expect(express.listen).toHaveBeenCalledTimes(1);
-        expect(express.listen.calls.mostRecent().args[0]).toBe(3000);
+        expect(express.listen.calls.mostRecent().args[0]).toBe(3001);
         done();
     });
 });
