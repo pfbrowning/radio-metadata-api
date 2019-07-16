@@ -16,7 +16,7 @@ app.listen(port, () => {
 
 // Configure CORS, JWT, & Swagger via custom middlewares
 app.use(corsMiddleware)
-app.use(jwtMiddleware);
+app.use(jwtMiddleware)
 app.use('/swagger', swaggerUi.serve, swaggerMiddleware)
 
 // Connect imported routes to Express

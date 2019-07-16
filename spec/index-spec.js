@@ -51,9 +51,9 @@ describe('index.ts', () => {
     expect(express.use).toHaveBeenCalledWith(corsMiddlewareSpy)
     expect(express.use).toHaveBeenCalledWith(jwtMiddlewareSpy)
     expect(express.use).toHaveBeenCalledWith('/swagger', jasmine.anything(), swaggerMiddlewareSpy)
-    expect(corsMiddlewareSpy).not.toHaveBeenCalled();
-    expect(jwtMiddlewareSpy).not.toHaveBeenCalled();
-    expect(swaggerMiddlewareSpy).not.toHaveBeenCalled();
+    expect(corsMiddlewareSpy).not.toHaveBeenCalled()
+    expect(jwtMiddlewareSpy).not.toHaveBeenCalled()
+    expect(swaggerMiddlewareSpy).not.toHaveBeenCalled()
   })
 
   it('should use our route configuration', () => {

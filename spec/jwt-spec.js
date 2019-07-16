@@ -59,7 +59,7 @@ describe('jwt', () => {
       jwksRsa.expressJwtSecret.and.returnValue('jwks-factory')
 
       // Act: Initialize the index
-      const corsMiddleware = proxyquire('../middlewares/jwt', {
+      proxyquire('../middlewares/jwt', {
         'express-jwt': jwt,
         'jwks-rsa': jwksRsa
       })
@@ -79,4 +79,4 @@ describe('jwt', () => {
       }
     })
   })
-});
+})
