@@ -37,28 +37,23 @@ describe('index.ts', () => {
     // Arrange: Set up spies to inject in place of the expected middlewares
     const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware')
     const jwtMiddlewareSpy = jasmine.createSpy('jwtMiddleware')
+    const swaggerMiddlewareSpy = jasmine.createSpy('swaggerMiddleware')
 
     // Act: Init index with the relevant express & middleware spies
     proxyquire('../index', {
       express: () => express,
       './middlewares/cors': corsMiddlewareSpy,
-      './middlewares/jwt': jwtMiddlewareSpy
+      './middlewares/jwt': jwtMiddlewareSpy,
+      './middlewares/swagger': swaggerMiddlewareSpy
     })
 
     // Assert that the middleware spies were passed to 'app.use', but not actually called
     expect(express.use).toHaveBeenCalledWith(corsMiddlewareSpy)
     expect(express.use).toHaveBeenCalledWith(jwtMiddlewareSpy)
+    expect(express.use).toHaveBeenCalledWith('/swagger', jasmine.anything(), swaggerMiddlewareSpy)
     expect(corsMiddlewareSpy).not.toHaveBeenCalled();
     expect(jwtMiddlewareSpy).not.toHaveBeenCalled();
-  })
-
-  it('should configure swagger', () => {
-    // Act: Initialize index
-    proxyquire('../index', {
-      express: () => express
-    })
-    // Assert that the swagger endpoint was configured
-    expect(express.use).toHaveBeenCalledWith('/swagger', jasmine.anything(), jasmine.anything())
+    expect(swaggerMiddlewareSpy).not.toHaveBeenCalled();
   })
 
   it('should use our route configuration', () => {

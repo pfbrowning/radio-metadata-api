@@ -45,7 +45,5 @@ a valid standard RS-256 JWT access token.  This is optional: if you don't provid
 environment variables, the API will be publicly accessible.
 
 ## Roadmap For 1.0.0
-* Move Swagger init to routes & controllers
-* Clean up & organize initial unit tests accordingly
 * Write now-playing unit tests
 * Provide consistent error responses
