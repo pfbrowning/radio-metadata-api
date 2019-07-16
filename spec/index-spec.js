@@ -33,19 +33,23 @@ describe('index.ts', () => {
     expect(express.listen.calls.mostRecent().args[0]).toBe('42')
   })
 
-  it('should call the CORS middleware', () => {
-    // Arrange: Set up a middleware spy to inject in place of the CORS middleware
+  it('should apply the expected middlewares', () => {
+    // Arrange: Set up spies to inject in place of the expected middlewares
     const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware')
+    const jwtMiddlewareSpy = jasmine.createSpy('jwtMiddleware')
 
-    // Act: Init index with the relevant express & middleware spy
+    // Act: Init index with the relevant express & middleware spies
     proxyquire('../index', {
       express: () => express,
-      './middlewares/cors': corsMiddlewareSpy
+      './middlewares/cors': corsMiddlewareSpy,
+      './middlewares/jwt': jwtMiddlewareSpy
     })
 
-    // Assert that the middleware spy was passed to 'app.use', but not actually called
+    // Assert that the middleware spies were passed to 'app.use', but not actually called
     expect(express.use).toHaveBeenCalledWith(corsMiddlewareSpy)
+    expect(express.use).toHaveBeenCalledWith(jwtMiddlewareSpy)
     expect(corsMiddlewareSpy).not.toHaveBeenCalled();
+    expect(jwtMiddlewareSpy).not.toHaveBeenCalled();
   })
 
   it('should configure swagger', () => {
@@ -55,86 +59,6 @@ describe('index.ts', () => {
     })
     // Assert that the swagger endpoint was configured
     expect(express.use).toHaveBeenCalledWith('/swagger', jasmine.anything(), jasmine.anything())
-  })
-
-  it('should configure jwt authentication based on the provided values for issuer & audience', () => {
-    // Arrange: Define a dummy set of input & expectation data
-    const testEntries = [
-      { issuer: null, audience: null, useJwt: false },
-      { issuer: null, audience: 'audience', useJwt: false },
-      { issuer: 'issuer', audience: null, useJwt: false },
-      { issuer: '     ', audience: '    ', useJwt: false },
-      {
-        issuer: 'http://issuer.com',
-        audience: 'fancy-audience',
-        useJwt: true,
-        expectedJwtParams: {
-          secret: 'jwks-factory',
-          audience: 'fancy-audience',
-          issuer: 'http://issuer.com/',
-          algorithms: ['RS256']
-        },
-        expectedJwksParams: {
-          cache: true,
-          rateLimit: true,
-          jwksRequestsPerMinute: 5,
-          jwksUri: `http://issuer.com/.well-known/jwks.json`
-        }
-      },
-      {
-        issuer: 'http://another-issuer.com/',
-        audience: 'another-audience',
-        useJwt: true,
-        expectedJwtParams: {
-          secret: 'jwks-factory',
-          audience: 'another-audience',
-          issuer: 'http://another-issuer.com/',
-          algorithms: ['RS256']
-        },
-        expectedJwksParams: {
-          cache: true,
-          rateLimit: true,
-          jwksRequestsPerMinute: 5,
-          jwksUri: `http://another-issuer.com/.well-known/jwks.json`
-        }
-      }
-    ]
-
-    // For each dummy input / expectation
-    testEntries.forEach(testEntry => {
-      // Arrange
-      // Clear & reassign 'audience' & 'issuer' based on the test input
-      delete process.env.audience
-      delete process.env.issuer
-      if (testEntry.issuer) process.env.issuer = testEntry.issuer
-      if (testEntry.audience) process.env.audience = testEntry.audience
-      // Configure spies to test the jwt configuration
-      const unless = jasmine.createSpy('unless')
-      const jwt = jasmine.createSpy('jwt').and.returnValue({ unless })
-      const jwksRsa = jasmine.createSpyObj('jwks-rsa', ['expressJwtSecret'])
-      jwksRsa.expressJwtSecret.and.returnValue('jwks-factory')
-
-      // Act: Initialize the index
-      proxyquire('../index', {
-        express: () => express,
-        'express-jwt': jwt,
-        'jwks-rsa': jwksRsa
-      })
-
-      // Assert that jwt was configured as per expectations
-      if (testEntry.useJwt) {
-        expect(jwt).toHaveBeenCalledTimes(1)
-        expect(jwt.calls.mostRecent().args[0]).toEqual(testEntry.expectedJwtParams)
-
-        expect(jwksRsa.expressJwtSecret).toHaveBeenCalledTimes(1)
-        expect(jwksRsa.expressJwtSecret.calls.mostRecent().args[0]).toEqual(testEntry.expectedJwksParams)
-
-        expect(unless).toHaveBeenCalledTimes(1)
-      } else {
-        expect(jwt).not.toHaveBeenCalled()
-        expect(jwksRsa.expressJwtSecret).not.toHaveBeenCalled()
-      }
-    })
   })
 
   it('should use our route configuration', () => {

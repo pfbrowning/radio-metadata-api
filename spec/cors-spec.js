@@ -5,7 +5,7 @@ describe('CORS Middleware', () => {
     delete process.env.allowedCorsOrigins
   })
 
-  it('should enable CORS with the expected origin based on the value of allowedCorsOrigins', (done) => {
+  it('should enable CORS with the expected origin based on the value of allowedCorsOrigins', () => {
     // Arrange: Define a set of expectations
     const testEntries = [
       { allowedCorsOrigins: null, expectedCorsParams: [] },
@@ -39,7 +39,5 @@ describe('CORS Middleware', () => {
       expect(cors).toHaveBeenCalledTimes(1)
       expect(cors.calls.mostRecent().args).toEqual(testEntry.expectedCorsParams)
     })
-
-    done()
   })
 })
