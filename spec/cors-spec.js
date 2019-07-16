@@ -30,12 +30,10 @@ describe('CORS Middleware', () => {
       /* Recreate the CORS spy once for each iteration so that we can always check
                 that it's been called exactly once. */
       const cors = jasmine.createSpy('cors')
-      // Initialize the middleware with the cors spy
+      // Act: Initialize the middleware with the cors spy
       const corsMiddleware = proxyquire('../middlewares/cors', {
         cors: cors
       })
-      // Act: Run the created CORS middleware function
-      corsMiddleware()
 
       // Assert that CORS was called with the expected params
       expect(cors).toHaveBeenCalledTimes(1)

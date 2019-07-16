@@ -19,7 +19,7 @@ app.listen(port, () => {
 })
 
 // Configure CORS via the middleware
-app.use(corsMiddleware())
+app.use(corsMiddleware)
 
 // Configure Swagger UI
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({

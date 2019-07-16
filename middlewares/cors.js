@@ -13,7 +13,7 @@ if (allowedCorsOriginsJSON) {
   }
 }
 if (Array.isArray(allowedCorsOrigins)) {
-  module.exports = () => cors({ origin: allowedCorsOrigins })
+  module.exports = cors({ origin: allowedCorsOrigins })
 } else {
-  module.exports = () => cors()
+  module.exports = cors()
 }
