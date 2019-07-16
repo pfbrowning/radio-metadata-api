@@ -30,6 +30,12 @@
     "standard": "^13.0.2"
   },
   "standard": {
-    "globals": ["describe", "beforeEach", "jasmine", "it", "expect"]
+    "globals": [
+      "describe",
+      "beforeEach",
+      "jasmine",
+      "it",
+      "expect"
+    ]
   }
 }
