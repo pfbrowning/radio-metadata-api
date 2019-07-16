@@ -35,7 +35,7 @@ Let's say that I want to get the metadata for the stream located at `http://188.
 I can now take note that "fetchsource" returns a value of "STREAM".  Now I know that if I want to make any subsequent metadata calls for the same station, I can add the "method=STREAM" parameter to the end of my GET request, as such: `http://localhost:3000/now-playing?url=http%3A%2F%2F188.165.212.92%3A8000%2Fheavy128mp3&method=stream`.
 
 ## Swagger
-The Swagger documentation can be hosted at `/swagger`.  For example, `http://localhost:3000/swagger` while running locally.
+The Swagger documentation can be accessed from `/swagger`.  For example, you can simply navigate to `http://localhost:3000/swagger` while running locally.
 
 ## CORS
 CORS is enabled for all origins by default.  If you would like to limit the allowed CORS origins, then specify the origins that you want to allow in the allowedCorsOrigins environment value as a *valid JSON array*.
