@@ -38,22 +38,26 @@ describe('index.ts', () => {
     const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware')
     const jwtMiddlewareSpy = jasmine.createSpy('jwtMiddleware')
     const swaggerMiddlewareSpy = jasmine.createSpy('swaggerMiddleware')
+    const errorMiddlewareSpy = jasmine.createSpy('errorMiddleware');
 
     // Act: Init index with the relevant express & middleware spies
     proxyquire('../index', {
       express: () => express,
       './middlewares/cors': corsMiddlewareSpy,
       './middlewares/jwt': jwtMiddlewareSpy,
-      './middlewares/swagger': swaggerMiddlewareSpy
+      './middlewares/swagger': swaggerMiddlewareSpy,
+      './middlewares/error': errorMiddlewareSpy
     })
 
     // Assert that the middleware spies were passed to 'app.use', but not actually called
     expect(express.use).toHaveBeenCalledWith(corsMiddlewareSpy)
     expect(express.use).toHaveBeenCalledWith(jwtMiddlewareSpy)
     expect(express.use).toHaveBeenCalledWith('/swagger', jasmine.anything(), swaggerMiddlewareSpy)
+    expect(express.use).toHaveBeenCalledWith(errorMiddlewareSpy)
     expect(corsMiddlewareSpy).not.toHaveBeenCalled()
     expect(jwtMiddlewareSpy).not.toHaveBeenCalled()
     expect(swaggerMiddlewareSpy).not.toHaveBeenCalled()
+    expect(errorMiddlewareSpy).not.toHaveBeenCalled()
   })
 
   it('should use our route configuration', () => {
