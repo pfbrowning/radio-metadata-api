@@ -1,19 +1,19 @@
 const internetRadio = require('node-internet-radio')
 const { validationResult } = require('express-validator/check')
-const httpErrors = require('../../utilities/http-errors.js');
+const httpErrors = require('../../utilities/http-errors.js')
 
 exports.apiGET = function (req, res) {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(400).json(new httpErrors.badRequest('Validation Error', errors.array()))
+    return res.status(400).json(new httpErrors.BadRequest('Validation Error', errors.array()))
   }
   internetRadio.getStationInfo(decodeURIComponent(req.query.url), function (error, station) {
     // If node-internet-radio reported an error, report it as a 502
     if (error) {
-      res.status(502).json(new httpErrors.badGateway('node-internet-radio error', error.message))
+      res.status(502).json(new httpErrors.BadGateway('node-internet-radio error', error.message))
       // If the call was successful, then return the data with a 200
     } else {
-      res.status(200).json(station);
+      res.status(200).json(station)
     }
     /* Pass in query method in case the user provided a value.
       If nothing was provided, then getStationInfo will check all

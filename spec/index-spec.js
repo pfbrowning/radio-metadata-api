@@ -38,7 +38,7 @@ describe('index.ts', () => {
     const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware')
     const jwtMiddlewareSpy = jasmine.createSpy('jwtMiddleware')
     const swaggerMiddlewareSpy = jasmine.createSpy('swaggerMiddleware')
-    const errorMiddlewareSpy = jasmine.createSpy('errorMiddleware');
+    const errorMiddlewareSpy = jasmine.createSpy('errorMiddleware')
 
     // Act: Init index with the relevant express & middleware spies
     proxyquire('../index', {
