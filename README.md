@@ -48,5 +48,6 @@ a valid standard RS-256 JWT access token.  This is optional: if you don't provid
 environment variables, the API will be publicly accessible.
 
 ## Roadmap For 1.0.0
-* Write now-playing unit tests
+* Finish now-playing unit tests
+* Write JSDoc comments for function exports
 * App Insights logging
