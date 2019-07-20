@@ -17,7 +17,7 @@ const nowPlaying = require('./controllers/now-playing')
  *        description: Encoded URL to fetch metadata for
  *        required: true
  *        type: string
- *        example: http%3A%2F%2F188.165.212.92%3A8000%2Fheavy128mp3
+ *        example: http%3A%2F%2F79.111.119.111%3A9107%2F%3B
  *      - name: method
  *        in: query
  *        description: The stream source method to query, as explained
@@ -31,9 +31,9 @@ const nowPlaying = require('./controllers/now-playing')
  *          description: Metadata was successfully retrieved
  *        400:
  *          description: Validation error - url was not provided or is not a valid url
- *        500:
- *          description: An error was reported by getStationInfo
+ *        502:
+ *          description: Failed to retrieve metadata from the provided URL
  */
-routes.get('/now-playing', query('url').exists(), nowPlaying.apiGET)
+routes.get('/now-playing', query('url').isURL(), nowPlaying.apiGET)
 
 module.exports = routes
