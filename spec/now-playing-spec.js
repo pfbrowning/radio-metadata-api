@@ -89,10 +89,72 @@ describe('now-playing controller', () => {
   })
 
   it('should properly pass in the url and method parameters from the query', () => {
+    // Arrange: Set up some test data
+    const testEntries = [
+      { url: 'http://station1.com', method: 'first method' },
+      { url: 'http://anotherstation.com', method: 'another method' },
+      { url: 'http://station3.com' },
+      { url: 'http://station4.com', method: 'method 4' }
+    ]
 
+    testEntries.forEach(testEntry => {
+      // Arrange: Construct an Express request with the provided test entry
+      const request = {
+        query: {
+          url: testEntry.url,
+          method: testEntry.method
+        }
+      }
+
+      // Act: Simulate a GET
+      nowPlaying.apiGET(request, response)
+
+      // Assert that the expected url and method were passed to getStationInfo
+      expect(nodeInternetRadio.getStationInfo.calls.mostRecent().args[0]).toBe(testEntry.url)
+      expect(nodeInternetRadio.getStationInfo.calls.mostRecent().args[2]).toBe(testEntry.method)
+    })
+
+    // Assert that we properly acted on each test entry
+    expect(nodeInternetRadio.getStationInfo).toHaveBeenCalledTimes(testEntries.length)
   })
 
   it('should properly decode the provided encoded URLs', () => {
+    // Arrange: Define a set of encoded & decoded URLs to test with
+    const testEntries = [
+      {
+        encodedUrl: 'http%3A%2F%2F188.165.212.92%3A8000%2Fheavy128mp3',
+        decodedUrl: 'http://188.165.212.92:8000/heavy128mp3'
+      },
+      {
+        encodedUrl: 'http%3A%2F%2F79.111.119.111%3A9107%2F%3B',
+        decodedUrl: 'http://79.111.119.111:9107/;'
+      },
+      {
+        encodedUrl: 'http%3A%2F%2Fbbcwssc.ic.llnwd.net%2Fstream%2Fbbcwssc_mp1_ws-eieuk',
+        decodedUrl: 'http://bbcwssc.ic.llnwd.net/stream/bbcwssc_mp1_ws-eieuk'
+      },
+      {
+        encodedUrl: 'http%3A%2F%2Fstream.wqxr.org%2Fwqxr',
+        decodedUrl: 'http://stream.wqxr.org/wqxr'
+      }
+    ]
 
+    testEntries.forEach(testEntry => {
+      // Arrange: Construct an Express request object based on the encoded url
+      const request = {
+        query: {
+          url: testEntry.encodedUrl
+        }
+      }
+
+      // Act: Simulate a GET
+      nowPlaying.apiGET(request, response)
+
+      // Assert that the decoded URL was passed to getStationInfo
+      expect(nodeInternetRadio.getStationInfo.calls.mostRecent().args[0]).toBe(testEntry.decodedUrl)
+    })
+
+    // Assert that we acted on each test entry
+    expect(nodeInternetRadio.getStationInfo).toHaveBeenCalledTimes(testEntries.length)
   })
 })
