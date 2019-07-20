@@ -57,12 +57,12 @@ exports.InternalServerError = function (message, detail) {
 /**
  * Constructor function which creates an object representing an HTTP error
  * response object to return to the consumer as JSON.  It's intended to
- * include helpful details about the error to the API consumer in a 
+ * include helpful details about the error to the API consumer in a
  * consistent format
- * @param {number} statusCode The HTTP Status Code for the error being 
+ * @param {number} statusCode The HTTP Status Code for the error being
  * returned, such as 400 or 500
  * @param {string} statusDescription The description associated with the
- * returned error code, such as "Bad Request" for 400 or "Internal Server Error" 
+ * returned error code, such as "Bad Request" for 400 or "Internal Server Error"
  * for 500.
  * @param {string} message A brief message used to communicate the type of
  * error to the consumer in a detail-agnostic fashion.  For example,

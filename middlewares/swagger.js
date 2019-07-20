@@ -1,6 +1,6 @@
 const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
-const packageVersion = require('../package.json').version;
+const packageVersion = require('../package.json').version
 
 module.exports = swaggerUi.setup(swaggerJSDoc({
   swaggerDefinition: {
