@@ -1,6 +1,6 @@
 {
   "name": "radio-metadata-api",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Node.JS API which queries radio stations for \"Now Playing\" metadata",
   "main": "index.js",
   "scripts": {
