@@ -43,10 +43,12 @@ CORS is enabled for all origins by default.  If you would like to limit the allo
 For example, if I want to specifically allow only the `http://localhost:4200` and `http://publishedspa.com` origins, I would store `["http://localhost:4200","http://publishedspa.com"]` in the `allowedCorsOrigins` environment variable.
 
 ## Authentication
-If you supply `issuer` and `audience` as environment variables, the API will require
-a valid standard RS-256 JWT access token.  This is optional: if you don't provide these
-environment variables, the API will be publicly accessible.
+If you supply `issuer` and `audience` as environment variables, the API will require a valid standard RS-256 JWT access token.  This is optional: if you don't provide these environment variables, the API will be publicly accessible.
+
+## Logging
+The API logs to Azure Application Insights *if* the `APPINSIGHTS_INSTRUMENTATIONKEY` environment variable is set.
 
 ## Roadmap For 1.0.0
-* App Insights logging
+* Winston logging
+* Log unhandled errors & getStationInfo errors
 * Test Coverage badge

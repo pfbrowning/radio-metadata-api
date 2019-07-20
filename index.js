@@ -15,6 +15,9 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`)
 })
 
+// Initialize the logger
+require('./logger')
+
 // Configure CORS, JWT, & Swagger via custom middlewares
 app.use('/swagger', swaggerUi.serve, swaggerMiddleware)
 app.use(corsMiddleware)

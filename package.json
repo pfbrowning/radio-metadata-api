@@ -12,6 +12,7 @@
   "author": "Patrick Browning",
   "license": "MIT",
   "dependencies": {
+    "applicationinsights": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
