@@ -8,7 +8,9 @@
     "lint": "standard",
     "lint-fix": "standard --fix",
     "test": "jasmine",
-    "test-coverage": "nyc --reporter=lcov --exclude=spec jasmine"
+    "test:coverage": "nyc --reporter=lcov --exclude=spec jasmine",
+    "test:coveralls": "node ./node_modules/coveralls/bin/coveralls.js < ./coverage/lcov.info",
+    "test:generate-publish-coverage": "npm run test:coverage && npm run test:coveralls"
   },
   "author": "Patrick Browning",
   "license": "MIT",
@@ -26,6 +28,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "coveralls": "^3.0.5",
     "jasmine": "^3.4.0",
     "nodemon": "^1.19.1",
     "nyc": "^14.1.1",
