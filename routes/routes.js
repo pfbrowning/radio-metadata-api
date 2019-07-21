@@ -30,10 +30,10 @@ const nowPlaying = require('./controllers/now-playing')
  *        200:
  *          description: Metadata was successfully retrieved
  *        400:
- *          description: Validation error - url was not provided or is not a valid url
+ *          description: Validation error - url was not provided
  *        502:
  *          description: Failed to retrieve metadata from the provided URL
  */
-routes.get('/now-playing', query('url').isURL(), nowPlaying.apiGET)
+routes.get('/now-playing', query('url').exists(), nowPlaying.apiGET)
 
 module.exports = routes
