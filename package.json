@@ -27,6 +27,7 @@
     "swagger-jsdoc": "^3.2.7",
     "swagger-ui-express": "^4.0.2",
     "winston": "^3.2.1",
+    "winston-azure-application-insights": "^2.0.0",
     "winston-daily-rotate-file": "^3.10.0"
   },
   "devDependencies": {
