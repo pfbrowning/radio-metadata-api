@@ -6,14 +6,7 @@ const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY
 
 // Use Azure App Insights if and only if an instrumentation key is present
 if (!isBlank(appInsightsKey)) {
-  appInsights.setup(appInsightsKey)
-    .setAutoDependencyCorrelation(true)
-    .setAutoCollectRequests(true)
-    .setAutoCollectPerformance(true, true)
-    .setAutoCollectExceptions(true)
-    .setAutoCollectDependencies(true)
-    .setAutoCollectConsole(true)
-    .start()
+  appInsights.setup(appInsightsKey).start()
 }
 
 // Log to the console and a daily rolling log
