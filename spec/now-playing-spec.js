@@ -1,6 +1,7 @@
 const proxyquire = require('proxyquire')
 const httpErrors = require('../utilities/http-errors.js')
 const testHelpers = require('../utilities/test-helpers.js')
+const spyFactories = require('../utilities/spy-factories')
 
 describe('now-playing controller', () => {
   let validatorCheck
@@ -11,6 +12,8 @@ describe('now-playing controller', () => {
   let nowPlaying
   let station
   let error
+  let logger
+
   const dummyRequest = {
     query: {
       url: 'http://testurl.com',
@@ -36,10 +39,14 @@ describe('now-playing controller', () => {
     nodeInternetRadio.getStationInfo.and.callFake((uri, callback, method) => callback(error, station))
     error = station = null
 
+    // Create a logger spy
+    logger = spyFactories.createLoggerSpy()
+
     // Initialize the now-playing module with the relevant spies
     nowPlaying = proxyquire('../routes/controllers/now-playing', {
       'express-validator/check': validatorCheck,
-      'node-internet-radio': nodeInternetRadio
+      'node-internet-radio': nodeInternetRadio,
+      '../../logger': logger
     })
   })
 
@@ -64,14 +71,15 @@ describe('now-playing controller', () => {
     testHelpers.assertExpressJsonResponse(responseStatus.json, expectedResponse)
   })
 
-  it('should return a Bad Gateway response on a node-internet-radio error', () => {
+  it('should return a Bad Gateway and log a warning on a node-internet-radio error', () => {
     // Arrange: Set a dummy error to be used by the getStationInfo spy callback
     error = { message: 'dummy error' }
 
     // Act: Simulate a GET
     nowPlaying.apiGET(dummyRequest, response)
 
-    // Assert that the expected Bad Gateway response was set
+    // Assert that the expected Bad Gateway response was set and that warn was called once
+    expect(logger.warn).toHaveBeenCalledTimes(1)
     testHelpers.assertExpressStatusCode(response.status, 502)
     testHelpers.assertExpressJsonResponse(responseStatus.json, new httpErrors.BadGateway('node-internet-radio error', 'dummy error'))
   })
