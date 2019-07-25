@@ -3,7 +3,9 @@ exports.createAppInsightsSpy = () => {
 }
 
 exports.createWinstonSpy = () => {
-  return jasmine.createSpyObj('winston', ['createLogger'])
+  const spy = jasmine.createSpyObj('winston', ['createLogger'])
+  spy.createLogger.and.returnValue({ stream: null })
+  return spy
 }
 
 exports.createLoggerSpy = () => {

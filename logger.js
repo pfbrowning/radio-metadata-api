@@ -10,9 +10,17 @@ if (!isBlank(appInsightsKey)) {
 }
 
 // Log to the console and a daily rolling log
-module.exports = winston.createLogger({
+const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({ handleExceptions: true }),
     new DailyRotateFile({ filename: 'logs/log-%DATE%.log', handleExceptions: true })
   ]
 })
+
+logger.stream = {
+  write: function (message, encoding) {
+    logger.debug(message)
+  }
+}
+
+module.exports = logger
