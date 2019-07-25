@@ -12,7 +12,14 @@ const transports = [
 
 // Use Azure App Insights if and only if an instrumentation key is present
 if (!isBlank(appInsightsKey)) {
-  appInsights.setup(appInsightsKey).start()
+  appInsights.setup(appInsightsKey)
+    .setAutoDependencyCorrelation(false)
+    .setAutoCollectRequests(false)
+    .setAutoCollectPerformance(false)
+    .setAutoCollectExceptions(false)
+    .setAutoCollectDependencies(false)
+    .setAutoCollectConsole(false)
+    .start()
   transports.push(new AzureApplicationInsightsLogger({
     insights: appInsights
   }))
