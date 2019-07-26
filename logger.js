@@ -12,14 +12,14 @@ const transports = [
 
 // Use Azure App Insights if and only if an instrumentation key is present
 if (!isBlank(appInsightsKey)) {
+  // Initialize the official appinsights api
   appInsights.setup(appInsightsKey)
     .setAutoDependencyCorrelation(false)
-    .setAutoCollectRequests(false)
-    .setAutoCollectPerformance(false)
-    .setAutoCollectExceptions(false)
     .setAutoCollectDependencies(false)
-    .setAutoCollectConsole(false)
+    .setAutoCollectExceptions(false)
     .start()
+
+  // Configure the App Insights Winston transport
   transports.push(new AzureApplicationInsightsLogger({
     insights: appInsights
   }))
@@ -27,13 +27,11 @@ if (!isBlank(appInsightsKey)) {
 
 // Log to the console and a daily rolling log
 const logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
   transports: transports
 })
-
-logger.stream = {
-  write: function (message, encoding) {
-    logger.debug(message)
-  }
-}
 
 module.exports = logger

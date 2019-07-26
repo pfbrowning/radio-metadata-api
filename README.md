@@ -50,5 +50,7 @@ If you supply `issuer` and `audience` as environment variables, the API will req
 The API logs to Azure Application Insights *if* the `APPINSIGHTS_INSTRUMENTATIONKEY` environment variable is set.
 
 ## Roadmap For 1.0.0
-* Log AppInsights via Winston
 * Improve test coverage
+
+## Backlog
+* Long-polling-based streamInfoChanged logic
