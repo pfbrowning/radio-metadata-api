@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/pfbrowning/radio-metadata-api/badge.svg?branch=master)](https://coveralls.io/github/pfbrowning/radio-metadata-api?branch=master)
 
 ## Introduction
-Radio Metadata API is a simple Node.JS API which queries the provided internet radio URL and looks up the "Now Playing" metadata.  It provides an GET endpoint around the getStationInfo function provided by [node-internet-radio](https://www.npmjs.com/package/node-internet-radio) library.
+Radio Metadata API is a Node.JS API which queries the provided internet radio URL and looks up the "Now Playing" metadata.  It provides an GET endpoint around the getStationInfo function provided by [node-internet-radio](https://www.npmjs.com/package/node-internet-radio) library.
 
 It's primarily intended for use by [Browninglogic Radio](https://github.com/pfbrowning/ng-radio), but it's intentionally decoupled in order to be of use to any other consumers which might also find it useful.
 
@@ -48,9 +48,6 @@ If you supply `issuer` and `audience` as environment variables, the API will req
 
 ## Logging
 The API logs to Azure Application Insights *if* the `APPINSIGHTS_INSTRUMENTATIONKEY` environment variable is set.
-
-## Roadmap For 1.0.0
-* Improve test coverage
 
 ## Backlog
 * Long-polling-based streamInfoChanged logic
