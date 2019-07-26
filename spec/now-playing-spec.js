@@ -1,13 +1,12 @@
 const proxyquire = require('proxyquire')
-const httpErrors = require('../utilities/http-errors.js')
-const testHelpers = require('../utilities/test-helpers.js')
+const httpErrors = require('../utilities/http-errors')
+const testHelpers = require('../utilities/test-helpers')
 const spyFactories = require('../utilities/spy-factories')
 
 describe('now-playing controller', () => {
   let validatorCheck
   let errorsSpy
   let response
-  let responseStatus
   let nodeInternetRadio
   let nowPlaying
   let station
@@ -29,10 +28,8 @@ describe('now-playing controller', () => {
     // Unless told otherwise, this spy should represent no validation errors
     errorsSpy.isEmpty.and.returnValue(true)
 
-    // Configure Express spies
-    response = jasmine.createSpyObj('response', ['status'])
-    responseStatus = jasmine.createSpyObj('resonseStatus', ['json'])
-    response.status.and.returnValue(responseStatus)
+    // Configure Express spy
+    response = spyFactories.createExpressResponseSpy()
 
     // Configure the node-internet-radio spy
     nodeInternetRadio = jasmine.createSpyObj('node-internet-radio', ['getStationInfo'])
@@ -68,7 +65,7 @@ describe('now-playing controller', () => {
     /* Assert that the appropriate Bad Request response was passed
         to the Express response spies. */
     testHelpers.assertExpressStatusCode(response.status, 400)
-    testHelpers.assertExpressJsonResponse(responseStatus.json, expectedResponse)
+    testHelpers.assertExpressJsonResponse(response.json, expectedResponse)
   })
 
   it('should return a Bad Gateway and log a warning on a node-internet-radio error', () => {
@@ -81,7 +78,7 @@ describe('now-playing controller', () => {
     // Assert that the expected Bad Gateway response was set and that warn was called once
     expect(logger.warn).toHaveBeenCalledTimes(1)
     testHelpers.assertExpressStatusCode(response.status, 502)
-    testHelpers.assertExpressJsonResponse(responseStatus.json, new httpErrors.BadGateway('node-internet-radio error', 'dummy error'))
+    testHelpers.assertExpressJsonResponse(response.json, new httpErrors.BadGateway('node-internet-radio error', 'dummy error'))
   })
 
   it('should return a 200 on a successful station fetch', () => {
@@ -93,7 +90,7 @@ describe('now-playing controller', () => {
 
     // Assert that the station object was returned with a 200
     testHelpers.assertExpressStatusCode(response.status, 200)
-    testHelpers.assertExpressJsonResponse(responseStatus.json, station)
+    testHelpers.assertExpressJsonResponse(response.json, station)
   })
 
   it('should properly pass in the url and method parameters from the query', () => {
