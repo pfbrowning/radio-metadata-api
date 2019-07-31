@@ -10,6 +10,7 @@ const transports = [
   new DailyRotateFile({ filename: 'logs/log-%DATE%.log', handleExceptions: true })
 ]
 
+let appInsightsInitialized = false;
 // Use Azure App Insights if and only if an instrumentation key is present
 if (!isBlank(appInsightsKey)) {
   // Initialize the official appinsights api
@@ -23,6 +24,8 @@ if (!isBlank(appInsightsKey)) {
   transports.push(new AzureApplicationInsightsLogger({
     insights: appInsights
   }))
+
+  appInsightsInitialized = true;
 }
 
 // Log to the console and a daily rolling log
@@ -35,3 +38,8 @@ const logger = winston.createLogger({
 })
 
 module.exports = logger
+
+logger.info('Logger Initialized', {
+  'appInsightsKey': appInsightsKey,
+  'appInsightsInitialized': appInsightsInitialized
+})

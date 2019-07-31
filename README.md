@@ -48,6 +48,3 @@ If you supply `issuer` and `audience` as environment variables, the API will req
 
 ## Logging
 The API logs to Azure Application Insights *if* the `APPINSIGHTS_INSTRUMENTATIONKEY` environment variable is set.
-
-## Backlog
-* Long-polling-based streamInfoChanged logic
