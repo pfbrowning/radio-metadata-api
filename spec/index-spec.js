@@ -1,10 +1,21 @@
 const proxyquire = require('proxyquire')
+const spyFactories = require('../utilities/spy-factories')
 
 describe('index.ts', () => {
   let express
+  let logger
+  let corsMiddlewareSpy
+  let jwtMiddlewareSpy
+  let swaggerMiddlewareSpy
+  let errorMiddlewareSpy
 
   beforeEach(() => {
     express = jasmine.createSpyObj('express', ['listen', 'use'])
+    corsMiddlewareSpy = jasmine.createSpy('corsMiddleware')
+    jwtMiddlewareSpy = jasmine.createSpy('jwtMiddleware')
+    swaggerMiddlewareSpy = jasmine.createSpy('swaggerMiddleware')
+    errorMiddlewareSpy = jasmine.createSpy('errorMiddleware')
+    logger = spyFactories.createLoggerSpy()
     // Clear each env variable that we care about before each test
     delete process.env.PORT
     delete process.env.audience
@@ -14,7 +25,13 @@ describe('index.ts', () => {
   it('should listen on port 3000 by default', () => {
     // Act: Initialize the index
     proxyquire('../index', {
-      express: () => express
+      express: () => express,
+      './logger': logger,
+      './middlewares/cors': corsMiddlewareSpy,
+      './middlewares/jwt': jwtMiddlewareSpy,
+      './middlewares/swagger': swaggerMiddlewareSpy,
+      './middlewares/error': errorMiddlewareSpy,
+      './routes/routes': {}
     })
     // Assert: express.listen should have been called once specifying port 3000
     expect(express.listen).toHaveBeenCalledTimes(1)
@@ -26,7 +43,13 @@ describe('index.ts', () => {
     process.env.PORT = 42
     // Act: Initialize the index
     proxyquire('../index', {
-      express: () => express
+      express: () => express,
+      './logger': logger,
+      './middlewares/cors': corsMiddlewareSpy,
+      './middlewares/jwt': jwtMiddlewareSpy,
+      './middlewares/swagger': swaggerMiddlewareSpy,
+      './middlewares/error': errorMiddlewareSpy,
+      './routes/routes': {}
     })
     // Assert: Listen should have specified the custom port
     expect(express.listen).toHaveBeenCalledTimes(1)
@@ -34,19 +57,15 @@ describe('index.ts', () => {
   })
 
   it('should apply the expected middlewares', () => {
-    // Arrange: Set up spies to inject in place of the expected middlewares
-    const corsMiddlewareSpy = jasmine.createSpy('corsMiddleware')
-    const jwtMiddlewareSpy = jasmine.createSpy('jwtMiddleware')
-    const swaggerMiddlewareSpy = jasmine.createSpy('swaggerMiddleware')
-    const errorMiddlewareSpy = jasmine.createSpy('errorMiddleware')
-
     // Act: Init index with the relevant express & middleware spies
     proxyquire('../index', {
       express: () => express,
+      './logger': logger,
       './middlewares/cors': corsMiddlewareSpy,
       './middlewares/jwt': jwtMiddlewareSpy,
       './middlewares/swagger': swaggerMiddlewareSpy,
-      './middlewares/error': errorMiddlewareSpy
+      './middlewares/error': errorMiddlewareSpy,
+      './routes/routes': {}
     })
 
     // Assert that the middleware spies were passed to 'app.use', but not actually called
@@ -67,6 +86,11 @@ describe('index.ts', () => {
     // Act: Initialize index with the relevant spies
     proxyquire('../index', {
       express: () => express,
+      './logger': logger,
+      './middlewares/cors': corsMiddlewareSpy,
+      './middlewares/jwt': jwtMiddlewareSpy,
+      './middlewares/swagger': swaggerMiddlewareSpy,
+      './middlewares/error': errorMiddlewareSpy,
       './routes/routes': testObj
     })
 

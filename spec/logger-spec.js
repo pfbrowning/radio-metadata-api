@@ -2,6 +2,7 @@ const proxyquire = require('proxyquire')
 const spyFactories = require('../utilities/spy-factories')
 
 describe('Logger', () => {
+  let logger
   let appInsights
   let winston
   let winstonAppInsights
@@ -9,6 +10,8 @@ describe('Logger', () => {
   beforeEach(() => {
     appInsights = spyFactories.createAppInsightsSpy()
     winston = spyFactories.createWinstonSpy()
+    logger = spyFactories.createLoggerSpy()
+    winston.createLogger.and.returnValue(logger)
     winstonAppInsights = jasmine.createSpy('winstonAppInsights')
   })
 

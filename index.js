@@ -28,4 +28,6 @@ app.use('/', routes)
 which happened in the controllers. */
 app.use(errorMiddleware)
 
-logger.info('API Initialized');
+logger.info('API Initialized', {
+  appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY
+})
