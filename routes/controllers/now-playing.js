@@ -1,5 +1,5 @@
 const internetRadio = require('node-internet-radio')
-const { validationResult } = require('express-validator/check')
+const { validationResult } = require('express-validator');
 const httpErrors = require('../../utilities/http-errors.js')
 const logger = require('../../logger')
 

@@ -1,5 +1,5 @@
 const routes = require('express').Router()
-const { query } = require('express-validator/check')
+const { query } = require('express-validator')
 const nowPlaying = require('./controllers/now-playing')
 
 /**
