@@ -51,3 +51,4 @@ The API logs to Azure Application Insights *if* the `APPINSIGHTS_INSTRUMENTATION
 
 ## Backlog
 * Configure Swagger to host from `/`
+* Configure environment configuration as comma-separated list, rather than a JSON array
