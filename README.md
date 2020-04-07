@@ -1,4 +1,5 @@
 # Radio Metadata API
+![Node.js CI](https://github.com/pfbrowning/radio-metadata-api/workflows/Node.js%20CI/badge.svg)
 [![Build Status](https://toxicbard.visualstudio.com/Browninglogic%20Radio/_apis/build/status/radio-metadata-api%20-%20CI?branchName=master)](https://toxicbard.visualstudio.com/Browninglogic%20Radio/_build/latest?definitionId=1&branchName=master)
 [![Coverage Status](https://coveralls.io/repos/github/pfbrowning/radio-metadata-api/badge.svg?branch=master)](https://coveralls.io/github/pfbrowning/radio-metadata-api?branch=master)
 
