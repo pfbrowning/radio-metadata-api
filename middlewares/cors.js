@@ -9,7 +9,7 @@ if (allowedCorsOriginsJSON) {
   try {
     allowedCorsOrigins = JSON.parse(allowedCorsOriginsJSON)
   } catch (error) {
-    console.error(error, 'Failed to parse allowedCorsOrigins.  Falling back to allowing all origins')
+    console.error(error, allowedCorsOriginsJSON, 'Failed to parse allowedCorsOrigins.  Falling back to allowing all origins')
   }
 }
 if (Array.isArray(allowedCorsOrigins)) {
