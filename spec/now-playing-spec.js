@@ -41,7 +41,7 @@ describe('now-playing controller', () => {
 
     // Initialize the now-playing module with the relevant spies
     nowPlaying = proxyquire('../routes/controllers/now-playing', {
-      'express-validator/check': validatorCheck,
+      'express-validator': validatorCheck,
       'node-internet-radio': nodeInternetRadio,
       '../../logger': logger
     })
