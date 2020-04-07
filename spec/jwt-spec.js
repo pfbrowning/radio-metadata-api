@@ -22,7 +22,7 @@ describe('jwt', () => {
           cache: true,
           rateLimit: true,
           jwksRequestsPerMinute: 5,
-          jwksUri: `http://issuer.com/.well-known/jwks.json`
+          jwksUri: 'http://issuer.com/.well-known/jwks.json'
         }
       },
       {
@@ -39,7 +39,7 @@ describe('jwt', () => {
           cache: true,
           rateLimit: true,
           jwksRequestsPerMinute: 5,
-          jwksUri: `http://another-issuer.com/.well-known/jwks.json`
+          jwksUri: 'http://another-issuer.com/.well-known/jwks.json'
         }
       }
     ]
