@@ -51,5 +51,6 @@ If you supply `issuer` and `audience` as environment variables, the API will req
 The API logs to Azure Application Insights *if* the `APPINSIGHTS_INSTRUMENTATIONKEY` environment variable is set.
 
 ## Backlog
+* Debug and diagnose MaxListenersExceededWarning
 * Configure Swagger to host from `/`
 * Configure environment configuration as comma-separated list, rather than a JSON array

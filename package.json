@@ -22,7 +22,7 @@
     "express-validator": "^6.4.0",
     "is-blank": "^2.1.0",
     "jwks-rsa": "^1.7.0",
-    "node-internet-radio": "^0.1.6",
+    "node-internet-radio": "^0.2.0",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4",
     "winston": "^3.2.1",
