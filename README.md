@@ -54,3 +54,6 @@ The API logs to Azure Application Insights *if* the `APPINSIGHTS_INSTRUMENTATION
 * Debug and diagnose MaxListenersExceededWarning
 * Configure Swagger to host from `/`
 * Configure environment configuration as comma-separated list, rather than a JSON array
+* Use Typescript
+* OWASP 10
+* Refactor
